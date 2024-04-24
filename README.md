@@ -1,3 +1,5 @@
+![Goojara Clone Demo](./src/assets/demo.png)
+
 # Goojara_clone
 
 This is a Vuejs Goojara clone, Currently the front end only, With API to fetch movie data.
