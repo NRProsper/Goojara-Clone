@@ -1,6 +1,6 @@
-# goojara_clone
+# Goojara_clone
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a Vuejs Goojara clone, Currently the front end only, With API to fetch movie data.
 
 ## Recommended IDE Setup
 
