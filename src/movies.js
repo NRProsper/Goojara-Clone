@@ -1,9 +1,15 @@
+import {useLoadingStore} from "@/stores/loading.js";
 import axios from "axios";
+
 
 const apiKey = "2faf74e2ae836af040529600092def36"
 export async function getTrendMovieData(cat) {
+    const loadingStore = useLoadingStore();
+    loadingStore.setLoading(true);
+
     try {
         let resp = await  axios.get(`https://api.themoviedb.org/3/trending/${cat}/day?api_key=${apiKey}`)
+        loadingStore.resetState();
         return resp.data.results;
     }catch (e) {
         return []
@@ -11,8 +17,11 @@ export async function getTrendMovieData(cat) {
 }
 
 export async function getPopularMovieData(cat) {
+    const loadingStore = useLoadingStore();
+    loadingStore.setLoading(true);
     try {
         let resp = await  axios.get(`https://api.themoviedb.org/3/${cat}/popular?api_key=${apiKey}`)
+        loadingStore.resetState();
         return resp.data.results;
     }catch (e) {
         return []
@@ -25,9 +34,12 @@ export function getMoviePoster(posterUrl) {
 }
 
 export async function getGenres() {
+    const loadingStore = useLoadingStore();
+    loadingStore.setLoading(true);
     try {
         console.log("Fetching Data...")
         let resp = await axios.get(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}`)
+        loadingStore.resetState();
         return resp.data.genres
     }catch (e) {
         console.log("Data not fetched")

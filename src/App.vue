@@ -2,6 +2,7 @@
 import {RouterLink, useRoute} from "vue-router";
 import NavBar from "@/components/NavBar.vue";
 import Footer from "@/components/Footer.vue";
+import Spinner from "@/components/Spinner.vue";
 
 const route = useRoute();
 
@@ -13,6 +14,7 @@ function isRouteActive(activeRoute) {
 
 <template>
   <div>
+    <Spinner />
     <NavBar/>
     <main>
       <div class="top_nav">
