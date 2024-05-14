@@ -1,32 +1,56 @@
 <script setup>
+import {onMounted, ref, watchEffect} from "vue";
 import MovieList from "@/components/MovieList.vue";
-import {getTrendMovieData, getGenres} from "@/movies.js";
-import {getRecentMovieData} from "@/movies.js";
-import {computed, onMounted, ref} from "vue";
+import MovieService from "@/services/MovieService.js";
+import {_shuffle, _sort} from "@/utils.js";
 
 const movies = ref([])
-const genres = ref([])
-const recentMedia = ref({
-  movies : [],
-  series : []
-})
+const series = ref([])
+const shuffled = ref([]);
 
 
-onMounted(async () => {
-  movies.value = await getTrendMovieData("movie")
-  genres.value = await getGenres()
-  recentMedia.value = await getRecentMovieData()
+//Currently using log to show errors.
+// TODO: to be modified later
+onMounted(() => {
+  MovieService.getTrending('movie')
+      .then((response) => {
+        movies.value = response.data.results.map((result) => {
+          return {
+            ...result,
+            type: 'movie'
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  MovieService.getTrending('tv')
+      .then((response) => {
+        series.value = response.data.results.map((result) => {
+          return {
+            ...result,
+            type: 'tv'
+          }
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+
 })
 
-const mixedMedia = computed(() => {
-  return [...recentMedia.value.movies, ...recentMedia.value.series]
+//TODO: Learn watchEffect again
+// It automatically tracks every reactive property accessed during its synchronous execution.
+watchEffect(() => {
+  shuffled.value = ([...movies.value, ...series.value]);
 })
+
 
 </script>
 
 <template>
   <ul class="feed">
-    <MovieList v-for="(movie, index) in mixedMedia" :key="index" :title="movie.title || movie.name" :type="movie.type" />
+    <MovieList v-for="(movie, index) in shuffled" :key="index" :title="movie.title || movie.name" :type="movie.type" />
   </ul>
 </template>
 

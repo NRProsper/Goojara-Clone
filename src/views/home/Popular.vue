@@ -1,5 +1,5 @@
 <script setup>
-import {getPopularMovieData, getPopularData, getRecentMovieData, sortedMovies} from "@/movies.js";
+import {getPopularMovieData, getPopularData, sortedMovies} from "@/movies.js";
 import {computed, onMounted, ref} from "vue";
 import MovieList from "@/components/MovieList.vue";
 

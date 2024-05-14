@@ -2,7 +2,8 @@ import {useLoadingStore} from "@/stores/loading.js";
 import axios from "axios";
 
 
-const apiKey = "2faf74e2ae836af040529600092def36"
+const apiKey = import.meta.env.VITE_MOVIE_API;
+
 export async function getTrendMovieData(cat) {
     const loadingStore = useLoadingStore();
     loadingStore.setLoading(true);
@@ -47,26 +48,7 @@ export async function getGenres() {
     }
 }
 
-export async function getRecentMovieData() {
-    try {
-        const moviesPromise = getTrendMovieData("movie")
-        const seriesPromise = getTrendMovieData("tv")
 
-        const [movies, series] = await Promise.all([moviesPromise, seriesPromise]);
-
-        const movieWithType = movies.map(movie =>({...movie, type:"movie"}))
-        const seriesWithType = series.map(seriesIt =>({...seriesIt, type:"tv"}))
-
-
-        return {
-            movies: movieWithType,
-            series: seriesWithType,
-        };
-
-    }catch (e) {
-        
-    }
-}
 
 export async function getPopularData() {
     try {

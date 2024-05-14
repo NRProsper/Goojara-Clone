@@ -1,7 +1,8 @@
 <script setup>
-import {getMoviePoster, getTrendMovieData} from "@/movies.js";
-import MovieCard from "@/components/MovieCard.vue";
 import {onMounted, ref} from "vue";
+import {getTrendMovieData} from "@/movies.js";
+import MovieCard from "@/components/MovieCard.vue";
+import {getPoster} from "@/utils.js";
 
 const movies = ref([])
 
@@ -17,7 +18,7 @@ onMounted(async () => {
     <div class="new_movies">
       <div class="container">
         <div class="flex">
-          <MovieCard v-for="(movie, index) in movies.slice(0,7)" :key="index" :image="getMoviePoster(movie.poster_path)" :title="movie.name" />
+          <MovieCard v-for="(movie, index) in movies.slice(0,7)" :key="index" :image="getPoster(movie.poster_path)" :title="movie.name" />
         </div>
       </div>
     </div>

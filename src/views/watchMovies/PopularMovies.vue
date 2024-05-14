@@ -2,14 +2,18 @@
 import {getMoviePoster, getPopularMovieData, sortedMovies, sortMovies} from "@/movies.js";
 import MovieCard from "@/components/MovieCard.vue";
 import {computed, onMounted, ref} from "vue";
+import MovieService from "@/services/MovieService.js";
 
 const popularMovies = ref([])
 const sorted = ref([])
 
 
 
-onMounted(async () => {
-  popularMovies.value = await getPopularMovieData("movie")
+onMounted(() => {
+  MovieService.getPopular('movie')
+      .then((response) => {
+        popularMovies.value = response.data.result;
+      })
 })
 
 

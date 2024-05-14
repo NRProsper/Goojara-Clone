@@ -1,12 +1,12 @@
 <script setup>
 import {computed, onMounted, ref} from "vue";
 import {RouterLink} from "vue-router";
-
 import {useRoute} from "vue-router";
+import MovieService from "@/services/MovieService.js";
+import {getPoster} from '@/utils.js'
 
 import MovieCard from "@/components/MovieCard.vue";
-import {getMoviePoster, getTrendMovieData, getGenres} from "@/movies.js";
-import {getRecentMovieData} from "@/movies.js";
+import {getTrendMovieData, getGenres} from "@/movies.js";
 
 const route = useRoute()
 
@@ -18,10 +18,17 @@ const recentMedia = ref({
 })
 
 
-onMounted(async () => {
-  movies.value = await getTrendMovieData("movie")
-  genres.value = await getGenres()
-  recentMedia.value = await getRecentMovieData()
+//Currently using log to show errors.
+// TODO: to be modified later
+onMounted(() => {
+  MovieService.getTrending('movie')
+      .then((response) => {
+        movies.value = response.data.results;
+        console.log(response.data.results)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 })
 
 
@@ -34,8 +41,8 @@ onMounted(async () => {
         <div class="flex">
           <MovieCard
               v-for="(movie, index) in movies.slice(0,7)"
-              :key="index"
-              :image="getMoviePoster(movie.poster_path)"
+              :key="movie.id"
+              :image="getPoster(movie.poster_path)"
               :title="movie.title"
               :class="{ 'last-card': index === 6 }"
           />

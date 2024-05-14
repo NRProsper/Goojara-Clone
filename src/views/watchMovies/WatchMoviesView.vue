@@ -1,12 +1,21 @@
 <script setup>
-import {getTrendMovieData, getMoviePoster} from "@/movies.js";
+import {getTrendMovieData} from "@/movies.js";
+import {getPoster} from "@/utils.js";
 import MovieCard from "@/components/MovieCard.vue";
 import {onMounted, ref} from "vue";
+import MovieService from "@/services/MovieService.js";
 
 const movies = ref([])
 
-onMounted(async () => {
-  movies.value = await getTrendMovieData("movie")
+onMounted( () => {
+  MovieService.getTrending('movie')
+      .then((response) => {
+        movies.value = response.data.results;
+        console.log(response.data.results)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 })
 
 
@@ -23,7 +32,7 @@ onMounted(async () => {
               v-for="(movie, index) in movies.slice(0,7)"
               :class="{ 'last-card': index === 6 }"
               :key="index"
-              :image="getMoviePoster(movie.poster_path)"
+              :image="getPoster(movie.poster_path)"
               :title="movie.title"
           />
         </div>
