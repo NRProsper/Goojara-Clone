@@ -10,6 +10,7 @@ import PopularMovies from "@/views/watchMovies/PopularMovies.vue";
 import GenresMovies from "@/views/watchMovies/GenresMovies.vue";
 import {onMounted, ref} from "vue";
 import {getGenres} from "@/movies.js";
+import PageNotFound from "@/pages/errorPages/PageNotFound.vue";
 
 const genres = ref([])
 const setup = async () => {
@@ -17,7 +18,7 @@ const setup = async () => {
   genres.value = replaceGenre(fetchedGenres, "Science Fiction", "Sci-Fi")
 }
 
-onMounted(setup)
+
 
 const replaceGenre = (genres, oldGenre, newGenre) => {
   return genres.map((genre) => (genre.name === oldGenre ? { ...genre, name: newGenre } : genre));
@@ -29,24 +30,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      redirect: 'watch-trends-recent',
       component: HomeView,
-      children: [
-        {path : 'watch-trends-recent', name: 'recent', component: Recent},
-        {path : 'watch-trends-popular', name: 'popular', component: Popular},
-        {path : 'watch-trends-genre', name: 'genre', component: Popular},
-        {path : 'watch-trends-year', name: 'trends-year', component: Popular},
-        {path : 'watch-movies-az', name: 'az', component: Popular},
-        {path : 'watch-movies-dubbed', name: 'dubbed', component: Popular}
-      ]
     },
     {
       path: '/watch-movies',
       name: 'watch-movies',
       component: WatchMoviesView,
       children: [
-        {path: '', name: 'recent-movie', component: RecentMovies},
-        {path: 'popular', name: 'popular-movie', component: PopularMovies},
         {path: 'genres',
           name: 'by-genres',
           component: GenresMovies,
@@ -67,8 +57,22 @@ const router = createRouter({
       path: '/watch-movie',
       name: 'watch-movie',
       component: WatchMovie
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'pageNotFound',
+      component: PageNotFound
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const routeExists = router.getRoutes().some(route => route.path === to.path);
+  if(!routeExists) {
+    next({name: 'pageNotFound'})
+  }else {
+    next();
+  }
 })
 
 export default router

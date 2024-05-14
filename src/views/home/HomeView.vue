@@ -3,15 +3,26 @@ import {computed, onMounted, ref} from "vue";
 import {RouterLink} from "vue-router";
 import {useRoute} from "vue-router";
 import MovieService from "@/services/MovieService.js";
-import {getPoster} from '@/utils.js'
+import {getPoster, tabs} from '@/utils.js'
+import {useLoadingStore} from "@/stores/loading.js";
 
 import MovieCard from "@/components/MovieCard.vue";
 import {getTrendMovieData, getGenres} from "@/movies.js";
+import Recent from "@/views/home/Recent.vue";
+import Popular from "@/views/home/Popular.vue";
 
 const route = useRoute()
+const loadingStore = useLoadingStore();
 
 const movies = ref([])
 const genres = ref([])
+
+const activeTab = ref(0);
+
+
+const changeTab = (index) => {
+  activeTab.value = index;
+}
 
 
 //Currently using log to show errors.
@@ -28,12 +39,13 @@ onMounted(() => {
 })
 
 
+
 </script>
 
 <template>
   <div>
     <div class="new_movies">
-      <div class="container">
+      <div class="container maintain">
         <div class="flex">
           <MovieCard
               v-for="(movie, index) in movies.slice(0,7)"
@@ -47,19 +59,26 @@ onMounted(() => {
     </div>
     <div>
       <div class="container">
-        <div class="main">
+        <div class="main hold">
           <div class="con-box">
             <div class="cat-sess">
-              <RouterLink :to="{name : 'recent'}">Recent</RouterLink>
-              <RouterLink :to="{name : 'popular'}">Popular</RouterLink>
-              <RouterLink :to="{name : 'genre'}">Genre</RouterLink>
-              <RouterLink :to="{name : 'trends-year'}">Year</RouterLink>
-              <RouterLink :to="{name : 'az'}">A-Z</RouterLink>
-              <RouterLink :to="{name : 'dubbed'}">Language</RouterLink>
+              <div class="tab"
+                   v-for="(tab, index) in tabs"
+                   :key="index"
+                   :class="{'active':activeTab === index}"
+                   @click="changeTab(index)"
+              >
+                {{tab.label}}
+              </div>
             </div>
             <div id="list" style="display: block;">
               <hr />
-              <RouterView />
+              <div v-if="activeTab === 0">
+                <Recent />
+              </div>
+              <div v-if="activeTab === 1">
+                <Popular />
+              </div>
             </div>
           </div>
           <div v-if="route.path ==='/'" class="side-main">
@@ -80,11 +99,12 @@ onMounted(() => {
 
 <style scoped>
 
-.router-link-active {
+.active {
   background: #2d6ab1!important;
   color: #fff!important;
   border: 1px solid #0d6ab1!important;
 }
+
 
 .flex div {
   width: 33.33%;
@@ -107,7 +127,7 @@ onMounted(() => {
 }
 
 
-.cat-sess a {
+.cat-sess .tab {
   height: 30px;
   border: 1px solid #ddd;
   margin: 4px;
@@ -168,7 +188,6 @@ hr {
   .main {
     display: flex;
     position: relative;
-    min-height: 120vh;
   }
   .con-box {
     width: 61%;

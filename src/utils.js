@@ -1,4 +1,14 @@
 import axios from "axios";
+
+export const tabs = [
+    { label: 'Recent', name: 'recent-movie' },
+    { label: 'Popular', name: 'popular-movie' },
+    { label: 'Genres', name: 'by-genres' },
+    { label: 'Year', name: 'by-year' },
+    { label: 'A-Z', name: 'az' },
+    { label: 'Language', name: 'language' }
+];
+
 export const getPoster = (url) => {
     return `https://image.tmdb.org/t/p/w500/${url}`;
 }

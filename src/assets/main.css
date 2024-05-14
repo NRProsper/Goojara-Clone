@@ -11,7 +11,13 @@ hr {
   border: 0;
   border-bottom: 3px solid #E9EBEE;
 
+}
 
+.maintain {
+  min-height: 250px;
+}
+.hold {
+  min-height: 120vh;
 }
 
 a {

@@ -1,12 +1,14 @@
 <script setup>
-import {getTrendMovieData} from "@/movies.js";
-import {getPoster} from "@/utils.js";
+import {getPoster, tabs} from "@/utils.js";
 import MovieCard from "@/components/MovieCard.vue";
 import {onMounted, ref} from "vue";
 import MovieService from "@/services/MovieService.js";
+import RecentMovies from "@/views/watchMovies/RecentMovies.vue";
+import PopularMovies from "@/views/watchMovies/PopularMovies.vue";
+import GenresMovies from "@/views/watchMovies/GenresMovies.vue";
 
 const movies = ref([])
-
+const activeTab = ref(0);
 onMounted( () => {
   MovieService.getTrending('movie')
       .then((response) => {
@@ -17,6 +19,9 @@ onMounted( () => {
       })
 })
 
+const changeTab = (index) => {
+  activeTab.value = index;
+}
 
 
 
@@ -25,7 +30,7 @@ onMounted( () => {
 <template>
   <div>
     <div class="new_movies">
-      <div class="container">
+      <div class="container maintain">
         <div class="flex">
           <MovieCard
               v-for="(movie, index) in movies.slice(0,7)"
@@ -40,23 +45,33 @@ onMounted( () => {
     <div class="nav-cont">
       <div class="nav">
         <div class="container">
-          <RouterLink :to="{name: 'recent-movie'}">Recent</RouterLink>
-          <RouterLink :to="{name : 'popular-movie'}">Popular</RouterLink>
-          <RouterLink :to="{name: 'by-genres'}">Genres</RouterLink>
-          <RouterLink :to="{name: 'by-year'}">Year</RouterLink>
-          <RouterLink to="az">A-Z</RouterLink>
-          <RouterLink to="language">Language</RouterLink>
+          <div class="tab"
+               v-for="(tab, index) in tabs"
+               :key="index"
+               :class="{'active':activeTab === index}"
+               @click="changeTab(index)"
+          >
+            {{tab.label}}
+          </div>
         </div>
       </div>
     </div>
-    <div class="container">
-      <RouterView />
+    <div class="container hold">
+      <div v-if="activeTab === 0">
+        <RecentMovies />
+      </div>
+      <div v-if="activeTab === 1">
+        <PopularMovies />
+      </div>
+      <div v-if="activeTab === 2">
+        <GenresMovies />
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.router-link-exact-active {
+.active {
   color: white;
   background: orange !important;
 }
@@ -65,11 +80,12 @@ onMounted( () => {
   margin: 25px 0 10px;
 }
 
+
 .nav {
   width: 100%;
 }
 
-.nav a {
+.nav .tab {
   margin: 0 2px;
   border-radius: 2px 2px 0 0;
   cursor: pointer;
