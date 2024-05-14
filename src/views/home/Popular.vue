@@ -1,32 +1,53 @@
 <script setup>
 import {getPopularMovieData, getPopularData, sortedMovies} from "@/movies.js";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watchEffect} from "vue";
 import MovieList from "@/components/MovieList.vue";
+import MovieService from "@/services/MovieService.js";
 
-const popular = ref([])
-const popularMedia = ref({
-  movies : [],
-  series : []
+const movies = ref([])
+const series = ref([])
+const popularMovies = ref([]);
+
+onMounted(() => {
+  MovieService.getPopular('movie')
+      .then((response) => {
+        movies.value = response.data.results.map((result) => {
+          return {
+            ...result,
+            type: 'movie'
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  MovieService.getPopular('tv')
+      .then((response) => {
+        series.value = response.data.results.map((result) => {
+          return {
+            ...result,
+            type: 'tv'
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 })
 
-onMounted(async () => {
-  popular.value = await getPopularMovieData("movie")
-  popularMedia.value = await getPopularData()
+watchEffect(() => {
+  popularMovies.value = [...movies.value, ...series.value];
 })
 
-const mixedMedia = computed(() => {
-  return [...popularMedia.value.movies, ...popularMedia.value.series]
-})
-
-const sortedMedia = computed(() => {
-  return sortedMovies(mixedMedia.value)
-})
+// const sortedMedia = computed(() => {
+//   return sortedMovies(popularMovies.value)
+// })
 
 </script>
 
 <template>
   <ul class="feed">
-    <MovieList v-for="(movie, index) in sortedMedia" :key="index" :title="movie.title || movie.name" :type="movie.type" />
+    <MovieList v-for="(movie, index) in popularMovies" :key="index" :title="movie.title || movie.name" :type="movie.type" />
   </ul>
 </template>
 

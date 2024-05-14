@@ -12,10 +12,6 @@ const route = useRoute()
 
 const movies = ref([])
 const genres = ref([])
-const recentMedia = ref({
-  movies : [],
-  series : []
-})
 
 
 //Currently using log to show errors.
@@ -172,6 +168,7 @@ hr {
   .main {
     display: flex;
     position: relative;
+    min-height: 120vh;
   }
   .con-box {
     width: 61%;

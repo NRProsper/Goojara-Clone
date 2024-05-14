@@ -2,13 +2,19 @@
 import {getMoviePoster, getTrendMovieData} from "@/movies.js";
 import MovieCard from "@/components/MovieCard.vue";
 import {onMounted, ref} from "vue";
+import MovieService from "@/services/MovieService.js";
 
 const movies = ref([])
 
-onMounted(async () => {
-  movies.value = await getTrendMovieData("movie")
+onMounted( () => {
+  MovieService.getTrending('movie')
+      .then((response) => {
+        movies.value = response.data.results;
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 })
-
 
 function getYear(releaseDate) {
   const date = new Date(releaseDate)

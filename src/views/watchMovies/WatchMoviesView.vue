@@ -11,7 +11,6 @@ onMounted( () => {
   MovieService.getTrending('movie')
       .then((response) => {
         movies.value = response.data.results;
-        console.log(response.data.results)
       })
       .catch((error) => {
         console.log(error);

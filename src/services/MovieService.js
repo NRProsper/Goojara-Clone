@@ -19,9 +19,6 @@ export default {
         return apiClient.get('trending/'+category+'/day?api_key='+API_KEY);
     },
     getPopular(category) {
-        return apiClient.get(category+'/popular?day?api_key='+API_KEY);
+        return apiClient.get(category+'/popular?api_key='+API_KEY);
     },
-    getRecent(category) {
-        return apiClient.get();
-    }
 }

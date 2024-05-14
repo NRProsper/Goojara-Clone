@@ -12,7 +12,10 @@ const sorted = ref([])
 onMounted(() => {
   MovieService.getPopular('movie')
       .then((response) => {
-        popularMovies.value = response.data.result;
+        popularMovies.value = response.data.results;
+      })
+      .catch((error) => {
+        console.log(error);
       })
 })
 
