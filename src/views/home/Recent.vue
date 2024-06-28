@@ -2,7 +2,6 @@
 import {onMounted, ref, watchEffect} from "vue";
 import MovieList from "@/components/MovieList.vue";
 import MovieService from "@/services/MovieService.js";
-import {_shuffle, _sort} from "@/utils.js";
 
 const movies = ref([])
 const series = ref([])

@@ -1,13 +1,11 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
-import {RouterLink} from "vue-router";
+import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import MovieService from "@/services/MovieService.js";
 import {getPoster, tabs} from '@/utils.js'
 import {useLoadingStore} from "@/stores/loading.js";
 
 import MovieCard from "@/components/MovieCard.vue";
-import {getTrendMovieData, getGenres} from "@/movies.js";
 import Recent from "@/views/home/Recent.vue";
 import Popular from "@/views/home/Popular.vue";
 

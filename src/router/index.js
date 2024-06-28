@@ -2,11 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/home/HomeView.vue'
 import WatchMoviesView from "@/views/watchMovies/WatchMoviesView.vue";
 import WatchSeriesView from "@/views/WatchSeriesView.vue";
-import Recent from "@/views/home/Recent.vue";
-import Popular from "@/views/home/Popular.vue";
 import WatchMovie from "@/pages/WatchMovie.vue";
 import RecentMovies from "@/views/watchMovies/RecentMovies.vue";
-import PopularMovies from "@/views/watchMovies/PopularMovies.vue";
 import GenresMovies from "@/views/watchMovies/GenresMovies.vue";
 import {onMounted, ref} from "vue";
 import {getGenres} from "@/movies.js";
